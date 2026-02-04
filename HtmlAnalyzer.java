@@ -73,16 +73,19 @@ class HtmlAnalyzer {
                 // Cria uma variável temporária com a tag atual sem <>/
                 String tag = line.replaceAll("[</>]", "");
 
+                //  Verifica se validate está vazio, se executa = uma tag de fechamento sem abertura
                 if (validate.isEmpty()) {
                     result = "HTML Malformed: Closing tag without opening tag";
                     break;
                 }
 
+                // Verifica se a ultima tag de validate é igual a tag de fechamento atual, se não for = má-formação
                 if (!validate.peek().equals(tag)) {
                     result = "HTML malformed: Closing tag isnt the same as the last opening tag";
                     break;
                 }
 
+                // Tira a tag atual do validate, foi fechada com sucesso
                 validate.pop();
                 currentDepth--;
             }
@@ -107,6 +110,10 @@ class HtmlAnalyzer {
             }
 
 
+        }
+        // Verificação final para garantir se há ou não má formação
+        if (!validate.isEmpty()) {
+            result = "HTML malformed";
         }
         System.out.println(validate);
         System.out.println(result);
