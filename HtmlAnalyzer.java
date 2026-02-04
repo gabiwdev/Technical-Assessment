@@ -3,8 +3,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 
 class HtmlAnalyzer {
@@ -52,6 +51,8 @@ class HtmlAnalyzer {
         lines.remove(4);
         lines.remove(4);
 
+        Deque<String> validate = new ArrayDeque<>();
+
         // Define a variável maxDepth, a profundidade máxima do código HTML
         int maxDepth = -1;
 
@@ -59,7 +60,7 @@ class HtmlAnalyzer {
         int currentDepth = 0;
 
         // Define a varíavel que o texto na camada
-        String deepestText = "";
+        String result = "";
 
         System.out.println(lines);
 
@@ -68,11 +69,30 @@ class HtmlAnalyzer {
 
             // Atualiza a currentDepth em -1 se for tag de fechamento
             if (line.startsWith("</")) {
+
+                // Cria uma variável temporária com a tag atual sem <>/
+                String tag = line.replaceAll("[</>]", "");
+
+                if (validate.isEmpty()) {
+                    result = "HTML Malformed: Closing tag without opening tag";
+                    break;
+                }
+
+                if (!validate.peek().equals(tag)) {
+                    result = "HTML malformed: Closing tag isnt the same as the last opening tag";
+                    break;
+                }
+
+                validate.pop();
                 currentDepth--;
             }
 
             // Atualiza a currentDepth em +1 se for tag de abertura
             else if (line.startsWith("<")) {
+                String tag = line.replaceAll("[</>]", "");
+
+                validate.push(tag);
+
                 currentDepth++;
             }
 
@@ -82,13 +102,14 @@ class HtmlAnalyzer {
                 // Atualiza o texto para o texto da linha atual
                 if (currentDepth > maxDepth) {
                     maxDepth = currentDepth;
-                    deepestText = line;
+                    result = line;
                 }
             }
 
 
         }
-        System.out.println(deepestText);
+        System.out.println(validate);
+        System.out.println(result);
         System.out.println(maxDepth);
     }
 }
