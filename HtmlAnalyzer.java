@@ -55,10 +55,6 @@ class HtmlAnalyzer {
             return;
         }
 
-        lines.remove(0);
-        lines.remove(4);
-        lines.remove(4);
-
         // Crio o stack de validação de má-formação
         Deque<String> validate = new ArrayDeque<>();
 
