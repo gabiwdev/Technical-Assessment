@@ -9,8 +9,7 @@ import java.util.*;
 class HtmlAnalyzer {
     public static void main(String[] args){
 
-
-
+        // Verifica se foi passado uma URL, se não, o código é imediatamente encerrado
         if (args.length == 0) {
             System.out.println("URL connection error");
             return;
@@ -60,6 +59,7 @@ class HtmlAnalyzer {
         lines.remove(4);
         lines.remove(4);
 
+        // Crio o stack de validação de má-formação
         Deque<String> validate = new ArrayDeque<>();
 
         // Define a variável maxDepth, a profundidade máxima do código HTML
