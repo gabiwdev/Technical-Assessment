@@ -84,7 +84,7 @@ class HtmlAnalyzer {
 
                 // Verifica se a ultima tag de validate é igual a tag de fechamento atual, se não for = má-formação
                 if (!validate.peek().equals(tag)) {
-                    result = "malformed HTML";
+                    System.out.println("malformed HTML");
                     return;
                 }
 
