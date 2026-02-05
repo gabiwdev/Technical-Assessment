@@ -9,8 +9,16 @@ import java.util.*;
 class HtmlAnalyzer {
     public static void main(String[] args){
 
+
+
+        if (args.length == 0) {
+            System.out.println("URL connection error");
+            return;
+        }
+
+
         // Crio uma string com o URL do site
-        String websiteURL = "https://httpbin.org/html";
+        String websiteURL = args[0];
 
         // Lista onde cada linha do HTML será armazenada
         List<String> lines = new ArrayList<>();
@@ -44,7 +52,8 @@ class HtmlAnalyzer {
 
         // Captura erros de conexão, leitura, falha de rede ou do site de teste fora do ar
         catch (IOException e){
-            System.out.println(e);
+            System.out.println("URL connection error");
+            return;
         }
 
         lines.remove(0);
@@ -62,8 +71,6 @@ class HtmlAnalyzer {
         // Define a varíavel que o texto na camada
         String result = "";
 
-        System.out.println(lines);
-
         // Itera sobre as linhas o HTML
         for (String line : lines) {
 
@@ -75,14 +82,14 @@ class HtmlAnalyzer {
 
                 //  Verifica se validate está vazio, se executa = uma tag de fechamento sem abertura
                 if (validate.isEmpty()) {
-                    result = "HTML Malformed: Closing tag without opening tag";
-                    break;
+                    System.out.println("malformed HTML");
+                    return;
                 }
 
                 // Verifica se a ultima tag de validate é igual a tag de fechamento atual, se não for = má-formação
                 if (!validate.peek().equals(tag)) {
-                    result = "HTML malformed: Closing tag isnt the same as the last opening tag";
-                    break;
+                    result = "malformed HTML";
+                    return;
                 }
 
                 // Tira a tag atual do validate, foi fechada com sucesso
@@ -113,11 +120,11 @@ class HtmlAnalyzer {
         }
         // Verificação final para garantir se há ou não má formação
         if (!validate.isEmpty()) {
-            result = "HTML malformed";
+            result = "malformed HTML";
         }
-        System.out.println(validate);
         System.out.println(result);
-        System.out.println(maxDepth);
+        return;
+
     }
 }
 
